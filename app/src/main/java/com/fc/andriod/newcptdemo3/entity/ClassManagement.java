@@ -1,4 +1,4 @@
-package com.fc.andriod.newcptdemo3;
+package com.fc.andriod.newcptdemo3.entity;
 
 
 import android.os.Parcel;

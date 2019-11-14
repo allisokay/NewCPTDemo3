@@ -1,9 +1,14 @@
-package com.fc.andriod.newcptdemo3;
+package com.fc.andriod.newcptdemo3.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.fc.andriod.newcptdemo3.R;
+import com.fc.andriod.newcptdemo3.RecyclerViewActivity;
+import com.fc.andriod.newcptdemo3.entity.ClassManagement;
 
 import java.util.List;
 
@@ -12,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class ListDemoAdapter extends RecyclerView.Adapter<ListDemoAdapter.ListViewHolder>  {
     private List<ClassManagement> data;
-
+    private RecyclerViewActivity.OnItemClickListener listener;
     public ListDemoAdapter(List<ClassManagement> data) {
         this.data = data;
     }
@@ -22,6 +27,11 @@ public class ListDemoAdapter extends RecyclerView.Adapter<ListDemoAdapter.ListVi
         notifyDataSetChanged();
 
     }
+
+    public void setOnItemClickListener(RecyclerViewActivity.OnItemClickListener listener) {
+                   this.listener=listener;
+    }
+
     /**
      * 创建一个ViewHolder并返回
      * @param parent 相当于Item盛放的容器
@@ -41,9 +51,19 @@ public class ListDemoAdapter extends RecyclerView.Adapter<ListDemoAdapter.ListVi
      * @param position 列表数据的下标
      */
     @Override
-    public void onBindViewHolder(@NonNull ListViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ListViewHolder holder, final int position) {
         ClassManagement classManagement=data.get(position);
         holder.textView.setText(classManagement.getClass_name());
+
+        holder.textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                 if (listener !=null){
+                     listener.itemClick(position,v);
+                 }
+            }
+        });
+
     }
     /**
      * @return 返回列表数据大小
