@@ -4,6 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,6 +19,8 @@ import android.widget.Toast;
 import com.fc.andriod.newcptdemo3.adapter.ListDemoAdapter;
 import com.fc.andriod.newcptdemo3.adapter.NewRefreshLayoutAdapter;
 import com.fc.andriod.newcptdemo3.entity.ClassManagement;
+import com.fc.andriod.newcptdemo3.network.ApiDemoService;
+import com.fc.andriod.newcptdemo3.network.Repo;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
@@ -79,15 +86,45 @@ public class RefreshDemoActivity extends AppCompatActivity {
         initData();
     }
     private void initData() {
-        data=new ArrayList<>();
+       /* data=new ArrayList<>();
         for(int i=1;i<10;i++){
             ClassManagement classManagement=new ClassManagement("软工16级"+i+"班");
             data.add(classManagement);
         }
-        adapter.setData(data);
+        adapter.setData(data);*/
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.github.com/")
+                .build();
+        ApiDemoService service=retrofit.create(ApiDemoService.class);
+       /* Call<List<Repo>> call=service.listRepos("octocat");
+        call.enqueue(new Callback<List<Repo>>() {//异步请求
+            @Override
+            public void onResponse(Call<List<Repo>> call, Response<List<Repo>> response) {
+                Log.e("tag101",response.toString());
+            }
+
+            @Override
+            public void onFailure(Call<List<Repo>> call, Throwable t) {
+                Log.e("tag101",t.getMessage());
+            }
+        });
+        */
+        Call<ResponseBody> call= service.getRepos("octocat");
+        call.enqueue(new Callback<ResponseBody>() {
+           @Override
+           public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+               Log.e("tag101",response.toString());
+           }
+
+           @Override
+           public void onFailure(Call<ResponseBody> call, Throwable t) {
+               Log.e("tag101",t.getMessage());
+           }
+       });
+
     }
     private void loadData() {
-        Log.i("tag101",data.size()+"");
+      /*  Log.i("tag101",data.size()+"");
         int i=data.size()+1;
         freshAddData=new ArrayList<>();
         for(int j=0;j<2;j++){
@@ -97,7 +134,24 @@ public class RefreshDemoActivity extends AppCompatActivity {
             i++;
         }
      //  adapter.setData(freshAddData);
-        adapter.addData(freshAddData);
+        adapter.addData(freshAddData);*/
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.github.com/")
+                .build();
+        ApiDemoService service=retrofit.create(ApiDemoService.class);
+        Call<ResponseBody> call= service.getRepos("octocat");
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.e("tag101",response.toString());
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e("tag101",t.getMessage());
+            }
+        });
     }
 
 }
